@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Arslan Maksadow">
+    <title>Akylly gozegchi-uytgetmek</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-fileupload/bootstrap-fileupload.css' %}">
+</head>
+
+<body>
+<section id="container">
+    <header class="header black-bg">
+        <div class="sidebar-toggle-box">
+            <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+        </div>
+        <a href="{% url 'home_page' %}" class="logo"><b>Akylly<span>Gözegçi</span></b></a>
+        <div class="top-menu">
+            <ul class="nav pull-right top-menu">
+                <li><a class="logout" href="{% url 'logout' %}">Çykmak</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <aside>
+        <div id="sidebar" class="nav-collapse ">
+
+            <ul class="sidebar-menu" id="nav-accordion">
+                <p class="centered"><a href="{% url 'home_page' %}"><img src="{% static 'img/logo.png'%}" class="img-circle" width="80"></a></p>
+                <h5 class="centered">TDEI</h5>
+                <li class="mt">
+                    <a href="{% url 'register' %}">
+                        <i class="fa fa-dashboard"></i>
+                        <span>Girizmek</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+</section>
+
+<section id="container">
+    <section id="main-content">
+        <section class="wrapper">
+            <h3>Uytgetmek</h3>
+            <div class="row mt">
+                <div class="col-lg">
+                    <div class="form-panel">
+                        <style>body{
+                            font-size: 20px;
+                        }</style>
+
+                        <form method="post" class="form-horizontal style-form" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <div><button type="submit">Tassyklamak</button></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</section>
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/common-scripts.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap-fileupload/bootstrap-fileupload.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap-fileupload/jquery.dcjqaccordion.2.7.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Arslan Maksadow">
+    <title>Akylly Gozegchi-{{ people.name }} {{ people.surname }}</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-fileupload/bootstrap-fileupload.css' %}">
+</head>
+
+<body>
+<section id="container">
+    <header class="header black-bg">
+        <div class="sidebar-toggle-box">
+            <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+        </div>
+        <a href="{% url 'home_page' %}" class="logo"><b>Akylly<span>Gözegçi</span></b></a>
+        <div class="top-menu">
+            <ul class="nav pull-right top-menu">
+                <li><a class="logout" href="{% url 'logout' %}">Çykmak</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <aside>
+        <div id="sidebar" class="nav-collapse ">
+            <ul class="sidebar-menu" id="nav-accordion">
+                <p class="centered"><a href="{% url 'home_page' %}"><img src="{% static 'img/logo.png'%}" class="img-circle" width="80" alt="logo"></a></p>
+                <h5 class="centered">TDEI</h5>
+                <li class="mt">
+                    <a href="{% url 'register' %}">
+                        <i class="fa fa-dashboard"></i>
+                        <span>Girizmek</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+</section>
+
+<section id="container">
+    <section id="main-content">
+        <section class="wrapper">
+            <h3>Akylly gozeghci</h3>
+            <div class="row mt">
+                <div class="form-group">
+                    <div class="form-panel">
+                        {% if people.image %}
+                            <img src="{{ people.image.url }}" height="400" width="300" alt="{{ people.name }}">
+                        {% else %}
+                            <img src="{% static 'img/blank-profile-picture.png' %}" height="100" width="75" alt="blank">
+                        {% endif %}
+                        <br>
+                        <style>body{
+                            font-size: 20px;
+                        }</style>
+                        <span class="control-label col-md-3">Ady: {{ people.name }}</span><br>
+                        <span class="control-label col-md-3">Familiyasy: {{ people.surname }}</span><br>
+                        <span class="control-label col-md-3">Wezipesi: {{ people.profession }}</span><br>
+{#                        {% for item in people %}#}
+{#                            {% if item.person_id.id == people.id %}#}
+                            <span class="control-label col-md-4">Giren wagty: {{ people.get_in|date:"d.m.Y h:m:s" }}</span><br>
+                            <span class="control-label col-md-4">Cykan wagty: {{ people.get_out|date:"d.m.Y h:m:s" }}</span><br>
+{#                            {% endif %}#}
+{#                        {% endfor %}#}
+                        <a href="{% url 'delete' people.slug %}"><button>Ayyrmak</button></a>
+                        <a href="{% url 'data_change' people.slug %}"><button>Duzetmek</button></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</section>
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/common-scripts.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap-fileupload/bootstrap-fileupload.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap-fileupload/jquery.dcjqaccordion.2.7.js' %}"></script>
+</body>
+</html>
