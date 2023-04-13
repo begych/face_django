@@ -48,25 +48,23 @@ class VideoCamera(object):
         self.video.release()
 
     def get_frame(self):
-        success, image = self.video.read()
-        ret, face_locations = face_recognition.face_locations(image)
+        ret, image = self.video.read()
+        if ret:
+            face_locations0 = face_recognition.face_locations(image)
 
-        for index, (x, y, w, h) in enumerate(face_locations):
-            # x *= 4
-            # y *= 4
-            # w *= 4
-            # h *= 4
-            # faces = image[x:w, h:y]
-            # pil_img = Image.fromarray(faces)
-            # pil_img.save(f"Faces_in/{count}_face_img.jpg")
-            # cv2.imwrite('Faces_in/face_in_' + str(index) + '.jpg', faces)
-            cv2.rectangle(image, (h, x), (y, w), (0, 0, 255), 2)
-        # cv2.imshow('Cam 0', image)
+            for index, (x, y, w, h) in enumerate(face_locations0):
+                # x *= 4
+                # y *= 4
+                # w *= 4
+                # h *= 4
+                # faces = image[x:w, h:y]
+                # pil_img = Image.fromarray(faces)
+                # pil_img.save(f"Faces_in/{count}_face_img.jpg")
+                # cv2.imwrite('Faces_in/face_in_' + str(index) + '.jpg', faces)
+                cv2.rectangle(image, (h, x), (y, w), (0, 0, 255), 2)
+            # cv2.imshow('Cam 0', image)
 
-        # We are using Motion JPEG, but OpenCV defaults to capture raw images,
-        # so we must encode it into JPEG in order to correctly display the
-        # video stream.
-        jpeg = cv2.imencode('.jpg', image)
+            jpeg = cv2.imencode('.jpg', image)
         return jpeg.tobytes()
 
 
