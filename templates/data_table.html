@@ -4,6 +4,9 @@
 
 <head>
     <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Arslan Maksadow">
     <title>Akylly gozegchi- giris-cykys maglumatlary</title>
@@ -20,17 +23,30 @@
         <div class="sidebar-toggle-box">
             <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
         </div>
-        <a href="{% url 'home_page' %}" class="logo"><b>Akylly<span>Gözegçi</span></b></a>
-        <form id="content">
-            {#  <input type="text" name="input" class="input" id="search-input">#}
-            {#  <button type="reset" class="search" id="search-btn"></button>#}
-        </form>
 
-        <div class="top-menu">
-            <ul class="nav pull-right top-menu">
-                <li><a class="logout" href="{% url 'logout' %}">Çykmak</a></li>
-            </ul>
+        <div  class="row">
+            <div class="col-lg-9">
+                <a href="{% url 'home_page' %}" class="logo"><b>Akylly<span>Gözegçi</span></b></a>
+            </div>
+            <div class="col-md-1">
+                <div id="wrap">
+                    <form action="" autocomplete="on">
+                        <input id="search" name="search" type="text" placeholder="Gözleg ?"><input id="search_submit" value="Rechercher" type="submit">
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-offset-1">
+
+                <ul class="nav pull-right top-menu">
+                    <li><a class="logout" href="{% url 'logout' %}">Çykmak</a></li>
+                </ul>
+
+            </div>
         </div>
+
+
+
 
     </header>
 
@@ -55,90 +71,19 @@
     <section id="main-content">
         <section class="wrapper">
             <h3>Girip-cykys maglumatlary</h3>
-            <style>
-                main {display: flex;}
-                main > * {border: 1px solid;}
-                table {border-collapse: collapse; font-family: helvetica}
-                td, th {border:  1px solid;
-                    padding: 10px;
-                    min-width: 100px;
-                    background: white;
-                    box-sizing: border-box;
-                    text-align: left;
-                }
-                .table-container {
-                    position: relative;
-                    max-height:  300px;
-                    width: 500px;
-                    overflow: scroll;
-                }
 
-                thead th {
-                    position: -webkit-sticky;
-                    position: sticky;
-                    top: 0;
-                    z-index: 2;
-                    background: hsl(20, 50%, 70%);
-                }
-
-                thead th:first-child {
-                    left: 0;
-                    z-index: 3;
-                }
-
-                tfoot {
-                    position: -webkit-sticky;
-                    bottom: 0;
-                    z-index: 2;
-                }
-
-                tfoot td {
-                    position: sticky;
-                    bottom: 0;
-                    z-index: 2;
-                    background: hsl(20, 50%, 70%);
-                }
-
-                tfoot td:first-child {
-                    z-index: 3;
-                }
-
-                tbody {
-                    overflow: scroll;
-                    height: 100px;
-                }
-
-                /* MAKE LEFT COLUMN FIXEZ */
-                tr > :first-child {
-                    position: -webkit-sticky;
-                    position: sticky;
-                    background: hsl(180, 50%, 70%);
-                    left: 0;
-                }
-                /* don't do this */
-                tr > :first-child {
-                    box-shadow: inset 0px 1px black;
-                }
-
-            </style>
-            <div class="table-horizontal-container">
-                <table class="unfixed-table">
-                    <thead>
-                    <tr><th>T/b</th><th>Ady Familiyasy</th></th><th>Giren wagty</th><th>Cykan wagty</th></tr>
-                    </thead>
-                    <tbody>
-                    {% for i in people %}
-                        <tr>
-                            <th>{{ forloop.counter }}</th>
-                            <td><a href="{{ i.get_absolute_url }}">{{ i.name }} {{ i.surname }}</a></td>
-                            <td>{{ i.get_in|date:"d.m.Y h:m:s" }}</td>
-                            <td>{{ i.get_out|date:"d.m.Y h:m:s" }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+            <div class="row">
+                <div class="col-lg-6">
+                    <img src="{% url 'live_camera' %}" width="auto">
+                </div>
+                <div class="col-lg-6">
+                    <img src="{% url 'live_camera_2' %}" width="auto">
+                </div>
             </div>
-            </div>
+
+        </section>
+        <section >
+
         </section>
     </section>
 </section>
