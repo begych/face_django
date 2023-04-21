@@ -1,17 +1,24 @@
+import shutil
+
 import cv2
 import face_recognition
 import os
 import pickle5 as pickle
+from .config import host, user, password, db_name
+import pymysql
+
+from face.models import Person
 
 
 def FaceAdd(username, id):
 
-    with open("face_recognize/Data/database.pickle", "rb") as f:
-        database = pickle.load(f)
+    # with open("face_recognize/Data/database.pickle", "rb") as f:
+    #     database = pickle.load(f)
 
-    # database = {}
+    database = {}
 
     name = username
+    person_id = id
         # input("Name: ")
 
     os.mkdir(f"face_recognize/Photo's_Data/{name}")
@@ -52,6 +59,37 @@ def FaceAdd(username, id):
     with open(f"face_recognize/Data/database.pickle", "wb") as file:
         file.write(pickle.dumps(database))
 
+    shutil.copy2(f"/home/mtmerkz-10/PycharmProjects/face_django/face_recognize/Photo's_Data/{str(username)}/1.jpg" ,
+                 f"/home/mtmerkz-10/PycharmProjects/face_django/face_recognize/KnownFaces/{str(person_id)}.jpg"
+                 )
+
+    try:
+        connection = pymysql.connect(
+            host=host,
+            port=3306,
+            user=user,
+            password=password,
+            database=db_name,
+            cursorclass=pymysql.cursors.DictCursor
+        )
+        print("successfully connected....")
+        print("#" * 20)
+
+        try:
+            with connection.cursor() as cursor:
+
+                update_query = "UPDATE `face_person` SET  " \
+                               "image = %s WHERE id = %s;"
+                val = (f"{str(person_id)}.jpg", str(person_id))
+                cursor.execute(update_query, val)
+                connection.commit()
+
+        finally:
+            connection.close()
+
+    except Exception as ex :
+        print("connection refused...")
+        print(ex)
     cap.release()
     cv2.destroyAllWindows()
 
