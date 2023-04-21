@@ -1,27 +1,25 @@
-# from django.middleware.gzip import GZipMiddleware
-# import gzip
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import auth
-from django.urls import reverse_lazy
+# import os
+import subprocess
+# import time
+
+import psutil
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.views.decorators import gzip
-
-from django.views.generic import ListView, DetailView
-from django.views.generic.edit import DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-from .models import *
+from django.contrib.auth.models import auth
+from django.http.response import StreamingHttpResponse
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views.generic import DetailView
+from django.views.generic.edit import DeleteView, UpdateView
 
 from face_recognize.headshot import FaceAdd
-from django.http.response import StreamingHttpResponse
-
-
-from .camera import VideoCamera, gen
-from .camera_2 import VideoCamera_2, gen_2
+from .camera import VideoCamera, VideoCamera_2, gen
+from .models import *
 
 
 def index(request):
+    subprocess.call('/home/mtmerkez-7/PycharmProjects/face_django/face_recognize/start.sh', shell=True)
     return render(request, 'lock_screen.html')
 
 
@@ -45,11 +43,14 @@ def HomePage(request):
 
 
 def livefe(request):
+    subprocess.call('/home/mtmerkez-7/PycharmProjects/face_django/face_recognize/stop.sh', shell=True)
     return StreamingHttpResponse(gen(VideoCamera()), content_type='multipart/x-mixed-replace; boundary=frame')
 
 
 def livefe_2(request):
-    return StreamingHttpResponse(gen_2(VideoCamera_2()), content_type='multipart/x-mixed-replace; boundary=frame')
+    subprocess.call('/home/mtmerkez-7/PycharmProjects/face_django/face_recognize/stop.sh', shell=True)
+    return StreamingHttpResponse(gen(VideoCamera_2()), content_type='multipart/x-mixed-replace; boundary=frame')
+
 
 # class HomePage(LoginRequiredMixin, ListView,):
 #     model = Person
@@ -66,6 +67,9 @@ def livefe_2(request):
 
 @login_required(login_url='login')
 def register(request):
+    if not is_running("/home/mtmerkez-7/PycharmProjects/face_django/face_recognize/Camera.py"):
+        subprocess.call('/home/mtmerkez-7/PycharmProjects/face_django/face_recognize/start.sh', shell=True)
+    subprocess.call("", shell=True)
     if request.method == 'POST':
         name = request.POST['name']
         surname = request.POST['surname']
@@ -73,7 +77,7 @@ def register(request):
         image = request.FILES.get('image_upload')
         person_user = Person.objects.create(name=name, surname=surname, profession=profession, image=image)
         person_user.save()
-        FaceAdd(person_user.name+'_'+person_user.surname, person_user.id)
+        FaceAdd(person_user.name + '_' + person_user.surname, person_user.id)
         return redirect('home_page')
     else:
         return render(request, 'add_profile.html')
@@ -83,6 +87,8 @@ class PersonView(LoginRequiredMixin, DetailView):
     model = Person
     template_name = 'person_view.html'
     context_object_name = 'people'
+
+
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -108,4 +114,29 @@ def admin_logout(request):
     return redirect('/')
 
 
+def error_404(request, exception):
+    data = {}
+    return render(request, '404.html', data)
 
+
+def error_500(exception):
+    data = {}
+    return render('500.html', data)
+
+
+def error_403(request, exception):
+    data = {}
+    return render(request, '403.html', data)
+
+
+def error_400(request, exception):
+    data = {}
+    return render(request, '400.html', data)
+
+
+def is_running(script):
+    for q in psutil.process_iter():
+        if q.name().startswith('python'):
+            if len(q.cmdline()) > 1 and script in q.cmdline()[1] and q.pid != os.getpid():
+                return True
+    return False
