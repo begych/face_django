@@ -88,7 +88,7 @@ def FaceAdd(username, id):
             connection.close()
 
     except Exception as ex :
-        print("connection refused...")
+        print("connection refused....")
         print(ex)
     cap.release()
     cv2.destroyAllWindows()
